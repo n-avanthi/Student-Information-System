@@ -1,0 +1,156 @@
+.App {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+.loader{
+  color: aliceblue;
+}
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+.input {
+  max-width: 190px;
+  height: 30px;
+  border: 2px solid transparent;
+  outline: none;
+  border-bottom: 2px solid #3f3f3f;
+  caret-color: #3f3f3f;
+  background-color: #212121;
+  padding: 5px;
+  transition: .5s linear;
+  font-family: monospace;
+  letter-spacing: 1px;
+  color: #e4e4e4;
+  padding: 10px;
+  margin: 15px;
+  margin-bottom: 50px;
+
+}
+
+.input:focus {
+  border: 2px solid #ffffff;
+  caret-color: #ffffff;
+  color: #ffffff;
+  box-shadow: 4px 4px 10px #070707;
+}
+
+.input:focus::placeholder {
+  color: #ffffff;
+}
+
+
+
+
+
+
+
+button {
+  width: 10em;
+  position: relative;
+  height: 3.5em;
+  border: 3px ridge #fdfdfd;
+  outline: none;
+  background-color: transparent;
+  color: white;
+  transition: 1s;
+  border-radius: 0.3em;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  
+}
+
+button::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 3%;
+  width: 95%;
+  height: 40%;
+  background-color: rgb(26, 26, 26);
+  transition: 0.5s;
+  transform-origin: center;
+}
+
+button::before {
+  content: "";
+  transform-origin: center;
+  position: absolute;
+  top: 80%;
+  left: 3%;
+  width: 95%;
+  height: 40%;
+  background-color: rgb(26, 26, 26); 
+  transition: 0.5s;
+}
+
+button:hover::before,
+button:hover::after {
+  transform: scale(0)
+}
+
+button:hover {
+  box-shadow: inset 0px 0px 25px #414141;
+}
+
+
+h2{
+  margin: 50px;
+}
+
+
+
+/* Define styles for success alert */
+.alert-success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  padding: 8px 16px;
+  margin-bottom: 16px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+/* Define styles for error alert */
+.alert-error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  padding: 8px 16px;
+  margin-bottom: 16px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
