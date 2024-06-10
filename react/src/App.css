@@ -40,7 +40,6 @@
   }
 }
 
-
 .input {
   max-width: 190px;
   height: 30px;
@@ -70,12 +69,6 @@
 .input:focus::placeholder {
   color: #ffffff;
 }
-
-
-
-
-
-
 
 button {
   width: 10em;
@@ -130,8 +123,6 @@ button:hover {
 h2{
   margin: 50px;
 }
-
-
 
 /* Define styles for success alert */
 .alert-success {

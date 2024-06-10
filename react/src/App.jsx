@@ -19,34 +19,51 @@ function App() {
   const [usnToFetch, setUsnToFetch] = useState('');
   const [courseToFetchAttendance, setCourseToFetchAttendance] = useState('');
   const [courseToFetchGrade, setCourseToFetchGrade] = useState('');
-  const [studentInfo, setStudentInfo] = useState(null);
-  const [studentAttendance, setStudentAttendance] = useState(null);
-  const [studentGrade, setStudentGrade] = useState(null);
-  const [alertMessage, setAlertMessage] = useState(null);
-  const [alertType, setAlertType] = useState(null);
+  // const [studentInfo, setStudentInfo] = useState(null);
+  // const [studentAttendance, setStudentAttendance] = useState(null);
+  // const [studentGrade, setStudentGrade] = useState(null);
+  // const [alertMessage, setAlertMessage] = useState(null);
+  // const [alertType, setAlertType] = useState(null);
+  const [alertMessageAddStudent, setAlertMessageAddStudent] = useState(null);
+  const [alertTypeAddStudent, setAlertTypeAddStudent] = useState(null);
+  const [alertMessageUpdateAttendance, setAlertMessageUpdateAttendance] = useState(null);
+  const [alertTypeUpdateAttendance, setAlertTypeUpdateAttendance] = useState(null);
+  const [alertMessageUpdateGrade, setAlertMessageUpdateGrade] = useState(null);
+  const [alertTypeUpdateGrade, setAlertTypeUpdateGrade] = useState(null);
+  const [alertMessageFetchUSNs, setAlertMessageFetchUSNs] = useState(null);
+  const [alertTypeFetchUSNs, setAlertTypeFetchUSNs] = useState(null);
+  const [alertMessageFetchAttendance, setAlertMessageFetchAttendance] = useState(null);
+  const [alertTypeFetchAttendance, setAlertTypeFetchAttendance] = useState(null);
+  const [alertMessageFetchGrade, setAlertMessageFetchGrade] = useState(null);
+  const [alertTypeFetchGrade, setAlertTypeFetchGrade] = useState(null);
 
   useEffect(() => {
     const loadBlockchainData = async () => {
-      // Connect to Metamask (or any other Web3 provider)
       if (window.ethereum) {
-        const web3Instance = new Web3(window.ethereum);
-        setWeb3(web3Instance);
-
         try {
+          const web3Instance = new Web3(window.ethereum);
+          setWeb3(web3Instance);
+
           // Request account access if needed
           await window.ethereum.request({ method: 'eth_requestAccounts' });
+          
           // Get the list of accounts
           const accounts = await web3Instance.eth.getAccounts();
           setAccounts(accounts);
+          console.log('Accounts:', accounts);
 
           // Load the deployed contract
           const networkId = await web3Instance.eth.net.getId();
-          const contractAddress = '0x6bFF6aFf8347Ec046458273ED10E2b098022DFaE'; // Replace with your deployed contract address
+          console.log('Network ID:', networkId);
+          
+          const contractAddress = '0x79083be3c4620D0C803eb07c7f65eBe0793827a1'; // Replace with your deployed contract address
           const contractInstance = new web3Instance.eth.Contract(
             StudentInformationSystemABI.abi,
             contractAddress
           );
           setContract(contractInstance);
+          console.log('Contract instance:', contractInstance);
+
         } catch (error) {
           console.error('Error connecting to blockchain', error);
         }
@@ -57,6 +74,16 @@ function App() {
 
     loadBlockchainData();
   }, []);
+
+
+  const displayMessage = (message, type, setMessageState, setTypeState) => {
+    setMessageState(message);
+    setTypeState(type);
+    setTimeout(() => {
+      setMessageState(null);
+      setTypeState(null);
+    }, 5000); // Display alert for 5 seconds
+  };
 
   const addStudent = async () => {
   try {
@@ -71,10 +98,11 @@ function App() {
     // Call the addStudent function with the input values and send ETH
     await contract.methods.addStudent(usn, name, minor).send({ from: accounts[0], value: ethAmount });
     console.log('Student added successfully!');
-    // Print success message
-    alert('Student added successfully!');
+
+    displayMessage('Student added successfully!', 'success', setAlertMessageAddStudent, setAlertTypeAddStudent);
   } catch (error) {
     console.error('Error adding student', error);
+    displayMessage('Error adding student', 'error', setAlertMessageAddStudent, setAlertTypeAddStudent);
   }
 };
 const updateAttendance = async () => {
@@ -87,10 +115,11 @@ const updateAttendance = async () => {
       await contract.methods.updateAttendance(usnToUpdateAttendance, courseToUpdateAttendance, attendanceToUpdate).send({ from: accounts[0] });
 
       console.log('Attendance updated successfully!');
-      // Print success message
-      alert('Attendance updated successfully!');
+
+      displayMessage('Attendance updated successfully!', 'success', setAlertMessageUpdateAttendance, setAlertTypeUpdateAttendance);
     } catch (error) {
       console.error('Error updating attendance', error);
+      displayMessage('Error updating attendance', 'error', setAlertMessageUpdateAttendance, setAlertTypeUpdateAttendance);
     }
   };
 
@@ -104,10 +133,11 @@ const updateAttendance = async () => {
       await contract.methods.updateGrade(usnToUpdateGrade, courseToUpdateGrade, gradeToUpdate).send({ from: accounts[0] });
 
       console.log('Grade updated successfully!');
-      // Print success message
-      alert('Grade updated successfully!');
+
+      displayMessage('Grade updated successfully!', 'success', setAlertMessageUpdateGrade, setAlertTypeUpdateGrade);
     } catch (error) {
       console.error('Error updating grade', error);
+      displayMessage('Error updating grade', 'error', setAlertMessageUpdateGrade, setAlertTypeUpdateGrade);
     }
   };
 
@@ -121,11 +151,11 @@ const updateAttendance = async () => {
       const usns = await contract.methods.getStudentUSNs().call();
 
       console.log('Student USNs:', usns);
-      // Print success message
       const usnsString = usns.join(', ');
-      alert('Student USNs: ' + usnsString);
+      displayMessage('Student USNs: ' + usnsString, 'success', setAlertMessageFetchUSNs, setAlertTypeFetchUSNs);
     } catch (error) {
       console.error('Error fetching student USNs', error);
+      displayMessage('Error fetching student USNs', 'error', setAlertMessageFetchUSNs, setAlertTypeFetchUSNs);
     }
   };
 
@@ -139,10 +169,11 @@ const updateAttendance = async () => {
       const attendance = await contract.methods.getStudentAttendance(usnToFetch, courseToFetchAttendance).call();
 
       console.log('Student Attendance:', attendance);
-      // Print success message
-      alert('Student Attendance: ' + attendance);
+
+      displayMessage('Student Attendance: ' + attendance, 'success', setAlertMessageFetchAttendance, setAlertTypeFetchAttendance);
     } catch (error) {
       console.error('Error fetching student attendance', error);
+      displayMessage('Error fetching student attendance', 'error', setAlertMessageFetchAttendance, setAlertTypeFetchAttendance);
     }
   };
 
@@ -156,33 +187,12 @@ const updateAttendance = async () => {
       const grade = await contract.methods.getStudentGrade(usnToFetch, courseToFetchGrade).call();
 
       console.log('Student Grade:', grade);
-      // Print success message
-      alert('Student Grade: ' + grade);
+      displayMessage('Student Grade: ' + grade, 'success', setAlertMessageFetchGrade, setAlertTypeFetchGrade);
     } catch (error) {
       console.error('Error fetching student grade', error);
+      displayMessage('Error fetching student grade', 'error', setAlertMessageFetchGrade, setAlertTypeFetchGrade);
     }
   };
-
-  
-  const fetchStudentInfo = async () => {
-  if (contract && usnToFetch > 0) {
-    try {
-      const student = await contract.methods.getStudentInfo(usnToFetch).call();
-      console.log("Student Info:", student);
-      
-      if (student.usn === 0) {
-        setStudentInfo(["Invalid"]);
-      } else {
-        // Assuming the structure of student is {usn: <value>, name: <value>, minor: <value>, courses: <value>}
-        setStudentInfo([student]);
-        const studentString = student.join(', ');
-        alert('Student USNs: ' + studentString);
-      }
-    } catch (error) {
-      console.error("Error fetching student info:", error);
-    }
-  }
-};
 
   return (
     <div className="App">
@@ -191,13 +201,16 @@ const updateAttendance = async () => {
       <input placeholder="Name" className="input" name="text" type="text" value={name} onChange={(e) => setName(e.target.value)} />
       <input placeholder="Minor" className="input" name="text" type="text" onChange={(e) => setMinor(e.target.value)}/>
       <button onClick={addStudent} >Add Student</button>
-      
+      {alertMessageAddStudent && alertTypeAddStudent === 'success' && <div className="alert-success">{alertMessageAddStudent}</div>}
+      {alertMessageAddStudent && alertTypeAddStudent === 'error' && <div className="alert-error">{alertMessageAddStudent}</div>}
       <div>
         <h2>Update Attendance</h2>
         <input type="number" className="input" placeholder="USN" value={usnToUpdateAttendance} onChange={(e) => setUsnToUpdateAttendance(e.target.value)} />
         <input type="text" className="input" placeholder="Course" value={courseToUpdateAttendance} onChange={(e) => setCourseToUpdateAttendance(e.target.value)} />
         <input type="text" className="input" placeholder="Attendance" value={attendanceToUpdate} onChange={(e) => setAttendanceToUpdate(e.target.value)} />
         <button onClick={updateAttendance}>Update Attendance</button>
+        {alertMessageUpdateAttendance && alertTypeUpdateAttendance === 'success' && <div className="alert-success">{alertMessageUpdateAttendance}</div>}
+        {alertMessageUpdateAttendance && alertTypeUpdateAttendance === 'error' && <div className="alert-error">{alertMessageUpdateAttendance}</div>}
       </div>
       <div>
         <h2>Update Grade</h2>
@@ -205,29 +218,31 @@ const updateAttendance = async () => {
         <input type="text" className="input"placeholder="Course" value={courseToUpdateGrade} onChange={(e) => setCourseToUpdateGrade(e.target.value)} />
         <input type="number" className="input" placeholder="Grade" value={gradeToUpdate} onChange={(e) => setGradeToUpdate(e.target.value)} />
         <button onClick={updateGrade}>Update Grade</button>
+        {alertMessageUpdateGrade && alertTypeUpdateGrade === 'success' && <div className="alert-success">{alertMessageUpdateGrade}</div>}
+        {alertMessageUpdateGrade && alertTypeUpdateGrade === 'error' && <div className="alert-error">{alertMessageUpdateGrade}</div>}
       </div>
       <div>
         <h2>Fetch Student USNs</h2>
         <button onClick={fetchStudentUSNs}>Fetch Student USNs</button>
+        {alertMessageFetchUSNs && alertTypeFetchUSNs === 'success' && <div className="alert-success">{alertMessageFetchUSNs}</div>}
+        {alertMessageFetchUSNs && alertTypeFetchUSNs === 'error' && <div className="alert-error">{alertMessageFetchUSNs}</div>}
       </div>
       <div>
         <h2>Fetch Student Attendance</h2>
         <input type="number" className="input" placeholder="USN" value={usnToFetch} onChange={(e) => setUsnToFetch(e.target.value)} />
         <input type="text" className="input" placeholder="Course" value={courseToFetchAttendance} onChange={(e) => setCourseToFetchAttendance(e.target.value)} />
         <button onClick={fetchStudentAttendance}>Fetch Student Attendance</button>
+        {alertMessageFetchAttendance && alertTypeFetchAttendance === 'success' && <div className="alert-success">{alertMessageFetchAttendance}</div>}
+        {alertMessageFetchAttendance && alertTypeFetchAttendance === 'error' && <div className="alert-error">{alertMessageFetchAttendance}</div>}
       </div>
       <div>
         <h2>Fetch Student Grade</h2>
         <input type="number" className="input" placeholder="USN" value={usnToFetch} onChange={(e) => setUsnToFetch(e.target.value)} />
         <input type="text" className="input" placeholder="Course" value={courseToFetchGrade} onChange={(e) => setCourseToFetchGrade(e.target.value)} />
         <button onClick={fetchStudentGrade}>Fetch Student Grade</button>
+        {alertMessageFetchGrade && alertTypeFetchGrade === 'success' && <div className="alert-success">{alertMessageFetchGrade}</div>}
+        {alertMessageFetchGrade && alertTypeFetchGrade === 'error' && <div className="alert-error">{alertMessageFetchGrade}</div>}
       </div>
-      {/* Display alert message */}
-      {alertMessage && (
-        <div className={`alert-${alertType}`}>
-          {alertMessage}
-        </div>
-      )}
     </div>
   );
 }
