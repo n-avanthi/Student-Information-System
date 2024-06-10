@@ -13,19 +13,19 @@ This project is a decentralized application (DApp) which harnesses blockchain te
 
 ## Installation
 
-1. Clone the repository:
+1. Clone this repository to your local machine:
    
    ```bash
    git clone https://github.com/n-avanthi/Student-Information-System.git
    ```
    
-2. Install dependancies 
-- For frontend
+2. Install the required dependancies:
+- For frontend -
     ``` bash
     cd react
     npm install
     ```
-- For backend
+- For backend -
     ``` bash
     cd solidity
     npm install
@@ -33,7 +33,7 @@ This project is a decentralized application (DApp) which harnesses blockchain te
 
 ## To deploy a contract on the network
 
-1. Change the directory to Solidity
+1. Navigate to Backend directory
     ``` bash
     cd solidity
     ```
@@ -62,7 +62,7 @@ This project is a decentralized application (DApp) which harnesses blockchain te
 
 ## React frontend
 
-1. If the contract is deployed again, navigate to react/src/App.js and change the deployed contract address
+1. If the contract is deployed again, navigate to `react/src/App.js` and change the deployed contract address
     ```javascript
     const CONTRACT_ADDRESS = "redeployed-contract-address";
     ```
@@ -70,5 +70,6 @@ This project is a decentralized application (DApp) which harnesses blockchain te
 
 2. Start the react server
     ```bash
+    cd react
     npm start
     ```
